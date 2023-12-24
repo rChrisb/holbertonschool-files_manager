@@ -1,11 +1,11 @@
-import DBClient from "./utils/db";
+import DBClient from './utils/db';
 
-const Bull = require("bull");
-const { ObjectId } = require("mongodb");
-const imageThumbnail = require("image-thumbnail");
-const fs = require("fs");
+const Bull = require('bull');
+const { ObjectId } = require('mongodb');
+const imageThumbnail = require('image-thumbnail');
+const fs = require('fs');
 
-const fileQueue = new Bull("fileQueue");
+const fileQueue = new Bull('fileQueue');
 
 const createImageThumbnail = async (path, options) => {
   try {
@@ -20,15 +20,15 @@ const createImageThumbnail = async (path, options) => {
 
 fileQueue.process(async (job) => {
   const { fileId } = job.data;
-  if (!fileId) throw Error("Missing fileId");
+  if (!fileId) throw Error('Missing fileId');
 
   const { userId } = job.data;
-  if (!userId) throw Error("Missing userId");
+  if (!userId) throw Error('Missing userId');
 
   const fileDocument = await DBClient.db
-    .collection("files")
+    .collection('files')
     .findOne({ _id: ObjectId(fileId), userId: ObjectId(userId) });
-  if (!fileDocument) throw Error("File not found");
+  if (!fileDocument) throw Error('File not found');
 
   createImageThumbnail(fileDocument.localPath, { width: 500 });
   createImageThumbnail(fileDocument.localPath, { width: 250 });

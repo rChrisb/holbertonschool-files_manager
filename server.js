@@ -1,6 +1,6 @@
-import router from "./routes/index";
+import router from './routes/index';
 
-const express = require("express");
+const express = require('express');
 
 const app = express();
 const port = process.env.PORT || 5000;
